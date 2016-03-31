@@ -25,13 +25,13 @@ extList2 = ('DSX','DSX2','WSX','WSX2')  # tab-delimited, modify to csv
 # subroutines
 
 def parseFile(file):
-    fileName, fileExt = os.path.splitext(file)
+    fileName, fileExt = file.split('.',1)[0], file.split('.',1)[-1]
     baseFile = basename(fileName)
     f = open(file, 'r')
     for line in f:
         a = line.split(',')
-        outName = outDir + baseFile + fileExt + '.' + a[0]
-        if fileExt == '.TRX' and a[0] == '02':  #further split TRX files 
+        outName = outDir + baseFile + '.' + fileExt + '.' + a[0]
+        if fileExt == 'TRX' and a[0] == '02':  #further split TRX files 
             if a[2] in ('GS','PC','PS','SC','SS'):  
                 outName = outName + '.prod'
             elif a[2] == 'TX':
