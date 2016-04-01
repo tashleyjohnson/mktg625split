@@ -28,9 +28,12 @@ def parseFile(file):
     fileName, fileExt = file.split('.',1)[0], file.split('.',1)[-1]
     baseFile = basename(fileName)
     f = open(file, 'r')
+    stylist = 0
     for line in f:
         a = line.split(',')
         outName = outDir + baseFile + '.' + fileExt + '.' + a[0]
+        if fileExt == 'TRX' and a[0] == '01':
+            stylist = stylist + 1
         if fileExt == 'TRX' and a[0] == '02':  #further split TRX files 
             if a[2] in ('GS','PC','PS','SC','SS'):  
                 outName = outName + '.prod'
@@ -39,7 +42,10 @@ def parseFile(file):
             elif a[2] == 'TM':
                 outName = outName + '.time'
         outFile = open(outName,'a')
-        outFile.write(baseFile + ',' + line)
+        if fileExt == 'TRX' and a[0] in ('01','02'):
+            outFile.write(baseFile + ',' + str(stylist) + ',' + line)
+        else:
+            outFile.write(baseFile + ',' + line)
         
 def convertToCSV(file):
     csvFile = file + '.csv'
